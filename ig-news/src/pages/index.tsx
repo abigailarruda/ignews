@@ -1,20 +1,18 @@
+/* eslint-disable @next/next/no-img-element */
 import Head from "next/head";
 
 import { GetStaticProps } from "next";
-import Image from "next/image";
 
 import { SubscribeButton } from "../components/SubscribeButton";
 
 import { stripe } from "../services/stripe";
-
-import girlImage from "../../public/images/avatar.svg";
 
 import styles from "../styles/home.module.scss";
 
 interface HomeProps {
   product: {
     priceId: string;
-    amount: number;
+    amount: string;
   };
 }
 
@@ -41,17 +39,19 @@ export default function Home({ product }: HomeProps) {
             <span>for {product.amount} per month</span>
           </p>
 
-          <SubscribeButton priceId={product.priceId} />
+          <SubscribeButton />
         </section>
 
-        <Image src={girlImage} alt="Girl coding" />
+        <img src="/images/avatar.svg" alt="Girl coding" />
       </main>
     </>
   );
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const price = await stripe.prices.retrieve("price_1JFRDvAZbPPNPkpi7HueJQdA");
+  const price = await stripe.prices.retrieve(
+    "price_1JFRDvAZbPPNPkpi7HueJQdA"
+  );
 
   const product = {
     priceId: price.id,
